@@ -274,6 +274,8 @@ cpdef streamWaitEvent(intptr_t stream, intptr_t event, unsigned int flags=*)
 cpdef streamBeginCapture(intptr_t stream, int mode=*)
 cpdef intptr_t streamEndCapture(intptr_t stream) except? 0
 cpdef bint streamIsCapturing(intptr_t stream) except*
+cpdef addGraphToGraph(intptr_t graph, intptr_t childGraph)
+cpdef intptr_t createEmptyGraph() except? 0
 cpdef intptr_t eventCreate() except? 0
 cpdef intptr_t eventCreateWithFlags(unsigned int flags) except? 0
 cpdef eventDestroy(intptr_t event)

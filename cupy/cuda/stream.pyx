@@ -7,6 +7,7 @@ from cupy.cuda cimport graph
 
 from cupy import _util
 
+from libc.stdlib cimport malloc, free
 
 cdef object _thread_local = threading.local()
 
@@ -381,6 +382,17 @@ class _BaseStream:
             # the async APIs, such as cudaMallocAsync.)
             mode = runtime.streamCaptureModeRelaxed
         runtime.streamBeginCapture(self.ptr, mode)
+
+    def end_capture_with_other_graphs(self, graphs):
+        g = self.end_capture()
+        graph_list = [g] + graphs
+        cdef intptr_t* grph_ptr_list
+        grph_ptr_list = <intptr_t *> malloc(sizeof(intptr_t) * len(graph_list))
+        for i, g in enumerate(graph_list):
+            grph_ptr_list[i] = g.ptr
+        ret = graph.Graph.from_graphs(grph_ptr_list, len(graph_list))
+        free(grph_ptr_list)
+        return ret
 
     def end_capture(self):
         """End stream capture and retrieve the constructed CUDA graph.

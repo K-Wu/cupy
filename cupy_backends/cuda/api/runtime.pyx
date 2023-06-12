@@ -924,6 +924,31 @@ cpdef intptr_t streamEndCapture(intptr_t stream) except? 0:
     check_status(status)
     return <intptr_t>g
 
+cpdef addGraphToGraph(intptr_t graph, intptr_t childGraph):
+    cdef GraphNode* root
+    cdef GraphNode* dummy
+    cdef size_t rootNum
+    cudaGraphGetRootNodes(<Graph>graph, root, &rootNum)
+    with nogil:
+        status = cudaGraphAddChildGraphNode(dummy, <Graph>graph, root, 1,
+                                            <Graph>childGraph)
+    check_status(status)
+
+cpdef intptr_t createEmptyGraph() except? 0:
+    cdef Graph g
+    cdef GraphNode root
+    cudaGraphAddEmptyNode(<GraphNode*>&root, <Graph>g, NULL, 0)
+    return <intptr_t>g
+
+# cpdef intptr_t createGraphFromGraphs(list graphs) except? 0:
+#     cdef Graph g
+#     cdef GraphNode root
+#     cdef GraphNode* dummy
+#     cudaGraphAddEmptyNode(graph, <GraphNode*>&root, {}, 0)
+#     for graph in graphs:
+#         cudaGraphAddChildGraphNode(dummy, g, <GraphNode*>&root, 1, graph)
+#     return <intptr_t>g
+
 
 cpdef bint streamIsCapturing(intptr_t stream) except*:
     cdef StreamCaptureStatus s
@@ -1078,8 +1103,7 @@ cpdef intptr_t graphInstantiate(intptr_t graph) except? 0:
     # TODO(leofang): support reporting error log?
     cdef GraphExec ge
     with nogil:
-        status = cudaGraphInstantiate(<GraphExec*>(&ge), <Graph>graph,
-                                      NULL, NULL, 0)
+        status = cudaGraphInstantiate(<GraphExec*>(&ge), <Graph>graph, 0)
     check_status(status)
     return <intptr_t>ge
 

@@ -30,6 +30,17 @@ cdef class Graph:
             'be created via stream capture')
 
     @staticmethod
+    cdef Graph from_graphs(intptr_t *graphs, size_t num_graphs):
+        new_graph = runtime.createEmptyGraph()
+        for i in range(num_graphs):
+            runtime.addGraphToGraph(new_graph, graphs[i])
+
+        cdef intptr_t ge = runtime.graphInstantiate(new_graph)
+        cdef Graph graph = Graph.__new__(Graph)
+        graph._init(new_graph, ge)
+        return graph
+
+    @staticmethod
     cdef Graph from_stream(intptr_t g):
         # TODO(leofang): optionally print out the error log?
         cdef intptr_t ge = runtime.graphInstantiate(g)

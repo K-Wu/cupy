@@ -9,6 +9,9 @@ cdef class Graph:
     cdef void _init(self, intptr_t g, intptr_t ge) except*
 
     @staticmethod
+    cdef Graph from_graphs(intptr_t* graphs, size_t ngraphs)
+
+    @staticmethod
     cdef Graph from_stream(intptr_t g)
 
     cpdef launch(self, stream=*)
