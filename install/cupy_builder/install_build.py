@@ -677,7 +677,7 @@ def check_cusparselt_version(compiler, settings):
         return False
 
     _cusparselt_version = int(out)
-    return True
+    return False # the code is not compatible with cusparseLt 0.4 APIs
 
 
 def get_cusparselt_version(formatted=False):
