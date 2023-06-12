@@ -25,7 +25,7 @@ class Context:
         self.source_root = source_root
 
         self.use_cuda_python = _get_env_bool(
-            'CUPY_USE_CUDA_PYTHON', False, _env)
+            'CUPY_USE_CUDA_PYTHON', True, _env)
         self.use_hip = _get_env_bool(
             'CUPY_INSTALL_USE_HIP', False, _env)
         self.include_dirs = _get_env_path('CUPY_INCLUDE_PATH', _env)

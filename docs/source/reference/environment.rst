@@ -157,7 +157,7 @@ These environment variables are used during installation (building CuPy from sou
 
 .. envvar:: CUPY_USE_CUDA_PYTHON
 
-  Default: ``0``
+  Default: ``1``
 
   If set to ``1``, CuPy is built using `CUDA Python <https://github.com/NVIDIA/cuda-python>`_.
 
