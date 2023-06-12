@@ -1638,10 +1638,10 @@ cpdef setStream(intptr_t handle, size_t stream):
     # https://docs.nvidia.com/cuda/cusparse/index.html#optimization-notes
     # Before we come up with a robust strategy to test the support conditions,
     # we disable this functionality.
-    if not runtime._is_hip_environment and runtime.streamIsCapturing(stream):
-        raise NotImplementedError(
-            'calling cuSPARSE API during stream capture is currently '
-            'unsupported')
+    # if not runtime._is_hip_environment and runtime.streamIsCapturing(stream):
+    #     raise NotImplementedError(
+    #         'calling cuSPARSE API during stream capture is currently '
+    #         'unsupported')
 
     status = cusparseSetStream(<Handle>handle, <Stream>stream)
     check_status(status)
