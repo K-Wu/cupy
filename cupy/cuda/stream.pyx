@@ -386,12 +386,13 @@ class _BaseStream:
     def end_capture_with_other_graphs(self, graphs):
         g = self.end_capture()
         graph_list = [g] + graphs
-        cdef intptr_t* grph_ptr_list
-        grph_ptr_list = <intptr_t *> malloc(sizeof(intptr_t) * len(graph_list))
+        cdef intptr_t* grph_intptr_list
+        grph_intptr_list = <intptr_t *> malloc(sizeof(intptr_t) *
+                                               len(graph_list))
         for i, g in enumerate(graph_list):
-            grph_ptr_list[i] = g.ptr
-        ret = graph.Graph.from_graphs(grph_ptr_list, len(graph_list))
-        free(grph_ptr_list)
+            grph_intptr_list[i] = g.graph
+        ret = graph.Graph.from_graphs(grph_intptr_list, len(graph_list))
+        free(grph_intptr_list)
         return ret
 
     def end_capture(self):

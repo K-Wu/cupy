@@ -925,12 +925,14 @@ cpdef intptr_t streamEndCapture(intptr_t stream) except? 0:
     return <intptr_t>g
 
 cpdef addGraphToGraph(intptr_t graph, intptr_t childGraph):
-    cdef GraphNode* root
+    cdef GraphNode root
     cdef GraphNode* dummy
     cdef size_t rootNum
-    cudaGraphGetRootNodes(<Graph>graph, root, &rootNum)
+    status0 = cudaGraphGetRootNodes(<Graph>graph, <GraphNode*> &root, &rootNum)
+    check_status(status0)
     with nogil:
-        status = cudaGraphAddChildGraphNode(dummy, <Graph>graph, root, 1,
+        status = cudaGraphAddChildGraphNode(dummy, <Graph>graph,
+                                            <GraphNode*> &root, 1,
                                             <Graph>childGraph)
     check_status(status)
 
@@ -1106,6 +1108,9 @@ cpdef intptr_t graphInstantiate(intptr_t graph) except? 0:
         status = cudaGraphInstantiate(<GraphExec*>(&ge), <Graph>graph, 0)
     check_status(status)
     return <intptr_t>ge
+
+# cpdef Graph getGraph(intptr_t graph_ptr):
+#    return <Graph>graph_ptr
 
 cpdef graphLaunch(intptr_t graphExec, intptr_t stream):
     with nogil:

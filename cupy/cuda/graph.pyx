@@ -15,7 +15,7 @@ cdef class Graph:
             # at this point cudaGraphExec_t has been instantiated, so we no
             # longer need to hold the cudaGraph_t
             runtime.graphDestroy(graph)
-        self.graph = 0
+        self.graph = graph
         self.graphExec = graphExec
 
     def __dealloc__(self):
